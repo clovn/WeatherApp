@@ -2,10 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
 #  lint:
@@ -47,7 +47,7 @@ jobs:
         run: ./gradlew test
 
       - name: Upload test report
-        uses: actions.upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: unit_test_report
           path: app/build/reports/test/testDebugUnitTest/
@@ -69,7 +69,7 @@ jobs:
         run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: sample-app.apk
           path: app/build/outputs/apk/debug/app-debug.apk
