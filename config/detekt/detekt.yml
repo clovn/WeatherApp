@@ -1,0 +1,40 @@
+build:
+  maxIssues: 0
+  baseline: baseline.xml
+
+formatting:
+  Indentation:
+    active: true
+    indentSize: 4
+  TrailingWhitespace:
+    active: true
+  NoUnusedImports:
+    active: true
+
+style:
+  MagicNumber:
+    active: true
+    ignoreNumbers: [-1, 0, 1, 2]
+  LongParameterList:
+    active: true
+    maximum: 5
+  ForbiddenPublicDataClass:
+    active: true
+
+comments:
+  CommentOverPrivateFunction:
+    active: false
+
+potential-bugs:
+  UnreachableCode:
+    active: true
+  ExplicitGarbageCollectionCall:
+    active: true
+
+code-smell:
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 20
+  ComplexMethod:
+    active: true
+    threshold: 10

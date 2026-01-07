@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "29460394912",
+    "project_id": "semestrwork",
+    "storage_bucket": "semestrwork.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29460394912:android:41204d9a6f6e779eed6ac5",
+        "android_client_info": {
+          "package_name": "com.example.semestrwork"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBY1O8kMAwUy739s8vnJZ2lAbDaK_rIUsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
