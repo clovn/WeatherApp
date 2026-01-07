@@ -10,7 +10,6 @@ plugins {
 
 detekt {
     toolVersion = "2.0.0-alpha.1"
-    config = files("$rootProject.projectDir/config/detekt/detekt.yml")
     buildUponDefaultConfig = true
     autoCorrect = true
 }
