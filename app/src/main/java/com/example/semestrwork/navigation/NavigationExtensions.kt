@@ -1,5 +1,6 @@
 package com.example.semestrwork.navigation
 
+import androidx.compose.ui.unit.Density
 import androidx.navigation.NavController
 
 fun NavController.navigateToHome() {
@@ -20,4 +21,8 @@ fun NavController.navigateToLogin() {
 
 fun NavController.navigateToRegister() {
     navigate(Destination.Register.route)
+}
+
+fun NavController.navigateToDetail() {
+    navigate(Destination.Detail.route)
 }

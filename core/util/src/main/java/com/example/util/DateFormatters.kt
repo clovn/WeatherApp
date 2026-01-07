@@ -12,3 +12,8 @@ fun forecastFormat(date: LocalDateTime): String {
     val formatter = DateTimeFormatter.ofPattern("EEE dd")
     return date.format(formatter)
 }
+
+fun hourlyForecastFormat(date: LocalDateTime): String {
+    val formatter = DateTimeFormatter.ofPattern("hh:mm")
+    return date.format(formatter)
+}

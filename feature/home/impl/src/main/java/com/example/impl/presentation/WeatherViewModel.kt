@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import com.example.api.LogoutUseCase
 import com.example.api.WeatherData
 import com.example.impl.domain.WeatherUseCase
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
@@ -11,6 +15,12 @@ class WeatherViewModel(
     private val useCase: WeatherUseCase,
     private val logout: LogoutUseCase
 ) : ContainerHost<WeatherState, Nothing>, ViewModel() {
+
+    init {
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "HomeScreen")
+        }
+    }
 
     override val container = container<WeatherState, Nothing>(WeatherState.Loading)
 

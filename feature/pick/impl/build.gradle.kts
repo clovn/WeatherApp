@@ -67,6 +67,10 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.perf)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

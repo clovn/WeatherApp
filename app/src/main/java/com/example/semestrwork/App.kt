@@ -3,6 +3,7 @@ package com.example.semestrwork
 import android.app.Application
 import com.example.impl.di.addModule
 import com.example.impl.di.authModule
+import com.example.impl.di.detailModule
 import com.example.impl.di.homeModule
 import com.example.impl.di.pickModule
 import com.example.local.localModule
@@ -18,7 +19,9 @@ class App : Application() {
         FirebaseApp.initializeApp(this)
         startKoin {
             androidContext(this@App)
-            modules(listOf(networkModule, homeModule, localModule, pickModule, addModule, authModule))
+            modules(listOf(networkModule, homeModule, localModule, pickModule, addModule, authModule,
+                detailModule
+            ))
         }
 
     }

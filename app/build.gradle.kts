@@ -4,8 +4,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.gms.google-services")
-    id("dev.detekt") version "2.0.0-alpha.1"
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.firebase.perf)
+    alias(libs.plugins.detekt)
 }
 
 detekt {
@@ -73,6 +75,9 @@ dependencies {
     implementation(libs.gson)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.perf)
 
     implementation(project(":core:network"))
     implementation(project(":core:util"))
@@ -83,6 +88,8 @@ dependencies {
     implementation(project(":feature:pick:api"))
     implementation(project(":feature:auth:api"))
     implementation(project(":feature:auth:impl"))
+    implementation(project(":feature:detail:api"))
+    implementation(project(":feature:detail:impl"))
 
 
     testImplementation(libs.junit)

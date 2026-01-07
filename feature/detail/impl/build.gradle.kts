@@ -37,8 +37,7 @@ android {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-
-    buildFeatures {
+    buildFeatures{
         compose = true
     }
 }
@@ -67,20 +66,18 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
     implementation(libs.koin.androidx.compose)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.perf)
 
-    implementation(project(":feature:auth:api"))
+    implementation(project(":feature:detail:api"))
     implementation(project(":core:network"))
+    implementation(project(":core:local"))
     implementation(project(":core:util"))
-
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.coroutines.test)
 }
