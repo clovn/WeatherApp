@@ -12,7 +12,7 @@ import com.example.impl.presentation.RegisterScreen
 import com.example.impl.presentation.WeatherScreen
 
 @Composable
-fun NavGraph(navController: NavHostController = rememberNavController()) {
+fun navGraph(navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
         startDestination = Destination.Login.route
