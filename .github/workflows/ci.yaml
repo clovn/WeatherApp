@@ -4,6 +4,14 @@ on:
   pull_request:
     branches:
       - master
+      
+  workflow_dispatch:
+    inputs:
+      release_notes:
+        type: string
+        required: true
+        default: 'Manual Debug Build'
+        description: 'Release Notes'
 env:
   API_KEY: ${{ secrets.WEATHER_API_KEY }}
 
@@ -74,6 +82,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -96,8 +105,11 @@ jobs:
     - name: Build APK
       run: ./gradlew assembleDebug
 
-    - name: Deploy to Firebase App Distribution
-      run: |
-        ./gradlew appDistributionUploadRelease
-      env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+    - name: Upload Artifact to Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
+      with:
+        appId: ${{ secrets.FIREBASE_APP_ID }}
+        serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        groups: testers
+        file: app/build/outputs/apk/debug/app-debug.apk
+        releaseNotes: ${{ inputs.release_notes }}
