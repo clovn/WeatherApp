@@ -14,8 +14,8 @@ import org.orbitmvi.orbit.viewmodel.container
 class RegisterViewModel(
     private val register: RegisterUseCase,
     private val isAuth: IsAuthUseCase
-): ViewModel(), ContainerHost<RegisterState, Nothing> {
-    override val container = container<RegisterState, Nothing>(RegisterState.Idle)
+): ViewModel(), ContainerHost<RegisterState, AuthSideEffect> {
+    override val container = container<RegisterState, AuthSideEffect>(RegisterState.Idle())
 
     init {
         intent {
@@ -29,6 +29,20 @@ class RegisterViewModel(
     fun onEvent(event: AuthEvent) {
         when (event) {
             is AuthEvent.Register -> register(event.email, event.password)
+            is AuthEvent.ChangeEmail -> onChangeEmail(event.email)
+            is AuthEvent.ChangePassword -> onChangePassword(event.password)
+        }
+    }
+
+    private fun onChangeEmail(email: String) = intent {
+        if (state is RegisterState.Idle) {
+            reduce { (state as  RegisterState.Idle).copy(email = email) }
+        }
+    }
+
+    private fun onChangePassword(password: String) = intent {
+        if (state is RegisterState.Idle) {
+            reduce { (state as  RegisterState.Idle).copy(password = password) }
         }
     }
 
@@ -36,7 +50,8 @@ class RegisterViewModel(
         reduce { RegisterState.Loading }
         when(val result = register.invoke(email, password)){
             is AuthResult.Error -> {
-                reduce { RegisterState.Error(message = result.message) }
+                reduce { RegisterState.Idle() }
+                postSideEffect(AuthSideEffect.Error(message = result.message))
             }
             is AuthResult.Success -> {
                 reduce { RegisterState.Success }
@@ -46,12 +61,19 @@ class RegisterViewModel(
 }
 
 sealed class RegisterState{
-    object Idle : RegisterState()
+    data class Idle(val email: String = "", val password: String = "") : RegisterState()
     object Loading : RegisterState()
     object Success : RegisterState()
-    data class Error(val message: String) : RegisterState()
 }
 
 sealed class AuthEvent {
     data class Register(val email: String, val password: String) : AuthEvent()
+
+    data class ChangeEmail(val email: String): AuthEvent()
+
+    data class ChangePassword(val password: String): AuthEvent()
+}
+
+sealed class AuthSideEffect{
+    data class Error(val message: String): AuthSideEffect()
 }

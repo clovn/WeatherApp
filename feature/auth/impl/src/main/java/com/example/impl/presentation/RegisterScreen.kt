@@ -2,6 +2,7 @@ package com.example.impl.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,50 +34,58 @@ fun RegisterScreen(
 ) {
     val state by viewModel.collectAsState()
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
-        )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { viewModel.onEvent(AuthEvent.Register(email, password)) }, modifier = Modifier.fillMaxWidth()) {
-            Text("Register")
+    when (state) {
+        is RegisterState.Loading -> {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                CircularProgressIndicator()
+            }
         }
+        is RegisterState.Success -> navigateToHome()
+        is RegisterState.Idle -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                TextField(
+                    value = (state as RegisterState.Idle).email,
+                    onValueChange = { viewModel.onEvent(AuthEvent.ChangeEmail(email = it)) },
+                    label = { Text("Email") },
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-        Text("login", Modifier.clickable{
-            navigateToLogin()
-        })
+                Spacer(modifier = Modifier.height(8.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = (state as RegisterState.Idle).password,
+                    onValueChange = { viewModel.onEvent(AuthEvent.ChangePassword(password = it)) },
+                    label = { Text("Password") },
+                    modifier = Modifier.fillMaxWidth(),
+                    visualTransformation = PasswordVisualTransformation()
+                )
 
-        when (state) {
-            is RegisterState.Loading -> CircularProgressIndicator()
-            is RegisterState.Success -> navigateToHome()
-            is RegisterState.Error -> Text((state as RegisterState.Error).message, color = Color.Red)
-            else -> {}
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = { viewModel.onEvent(AuthEvent.Register((state as RegisterState.Idle).email, (state as RegisterState.Idle).password)) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Register")
+                }
+
+                Text("login", Modifier.clickable {
+                    navigateToLogin()
+                })
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }

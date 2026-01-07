@@ -19,9 +19,20 @@ class AddCityViewModel(
         }
     }
 
-    override val container = container<AddCityState, Nothing>(AddCityState.Idle)
+    override val container = container<AddCityState, Nothing>(AddCityState.Idle())
 
-    fun addCity(city: String) = intent {
+    fun onEvent(event: AddCityEvent) {
+        when(event){
+            is AddCityEvent.AddCity -> addCity(event.city)
+            is AddCityEvent.ChangeCity -> changeCity(event.city)
+        }
+    }
+
+    private fun changeCity(city: String) = intent {
+        reduce { AddCityState.Idle(cityName = city) }
+    }
+
+    private fun addCity(city: String) = intent {
         try {
             addCity.invoke(city)
             reduce { AddCityState.NavigateToPick }
@@ -32,7 +43,12 @@ class AddCityViewModel(
 }
 
 sealed class AddCityState{
-    object Idle: AddCityState()
+    data class Idle(val cityName: String = ""): AddCityState()
     data class Error(val error: String?): AddCityState()
     object NavigateToPick: AddCityState()
+}
+
+sealed class AddCityEvent{
+    data class AddCity(val city: String): AddCityEvent()
+    data class ChangeCity(val city: String): AddCityEvent()
 }
