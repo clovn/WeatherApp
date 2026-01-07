@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.impl.presentation.AddCityScreen
+import com.example.impl.presentation.HourlyWeatherScreen
 import com.example.impl.presentation.LoginScreen
 import com.example.impl.presentation.PickScreen
 import com.example.impl.presentation.RegisterScreen
@@ -18,9 +19,14 @@ fun navGraph(navController: NavHostController = rememberNavController()) {
         startDestination = Destination.Login.route
     ){
         composable(Destination.Home.route) {
-            WeatherScreen(navigateToLogin = {
-                navController.navigateToLogin()
-            }) {
+            WeatherScreen(
+                navigateToDetail = {
+                    navController.navigateToDetail()
+                },
+                navigateToLogin = {
+                    navController.navigateToLogin()
+                }
+            ) {
                 navController.navigateToPick()
             }
         }
@@ -50,6 +56,10 @@ fun navGraph(navController: NavHostController = rememberNavController()) {
             }) {
                 navController.navigateToRegister()
             }
+        }
+
+        composable(Destination.Detail.route) {
+            HourlyWeatherScreen()
         }
     }
 }

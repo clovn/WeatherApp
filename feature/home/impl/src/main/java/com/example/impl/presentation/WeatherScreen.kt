@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Logout
@@ -44,6 +45,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 fun WeatherScreen(
     viewModel: WeatherViewModel = koinInject(),
     navigateToLogin: () -> Unit,
+    navigateToDetail: () -> Unit,
     navigateToPick: () -> Unit
 ) {
     val state by viewModel.collectAsState()
@@ -61,11 +63,23 @@ fun WeatherScreen(
                 navigateToLogin()
             }
             is WeatherState.Loading -> {
-                CircularProgressIndicator()
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    CircularProgressIndicator()
+                }
+
             }
 
             is WeatherState.Error -> {
-                Text(text = "Error: ${(state as WeatherState.Error).error}", color = Color.Red)
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    Text(text = "Error: ${(state as WeatherState.Error).error}", color = Color.Red)
+
+                }
             }
 
             is WeatherState.Success -> {
@@ -101,7 +115,7 @@ fun WeatherScreen(
                                 )
                                 Text(" ${weatherData.city}", color = Color.White, fontSize = 18.sp)
                             }
-                            Icon(Icons.Default.Logout, contentDescription = "Menu", tint = Color.White, modifier = Modifier.clickable {
+                            Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = "Menu", tint = Color.White, modifier = Modifier.clickable {
                                 viewModel.onEvent(WeatherEvent.Logout)
                             })
                         }
@@ -120,7 +134,9 @@ fun WeatherScreen(
 
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
+                            modifier = Modifier.padding(top = 24.dp).fillMaxWidth().clickable{
+                                navigateToDetail()
+                            }
                         ) {
                             AsyncImage(
                                 model = "https://www.accuweather.com/assets/images/weather-icons/v2a/1.svg",

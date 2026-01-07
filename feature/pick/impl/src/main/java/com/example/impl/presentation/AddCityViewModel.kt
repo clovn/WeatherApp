@@ -2,12 +2,22 @@ package com.example.impl.presentation
 
 import androidx.lifecycle.ViewModel
 import com.example.impl.domain.AddCityUseCase
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
 class AddCityViewModel(
     private val addCity: AddCityUseCase
 ): ViewModel(), ContainerHost<AddCityState, Nothing> {
+
+    init {
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "AddCityScreen")
+        }
+    }
 
     override val container = container<AddCityState, Nothing>(AddCityState.Idle)
 

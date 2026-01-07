@@ -3,6 +3,10 @@ package com.example.impl.presentation
 import androidx.lifecycle.ViewModel
 import com.example.impl.domain.LoadCitiesUseCase
 import com.example.impl.domain.SaveSelectionUseCase
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
@@ -10,6 +14,12 @@ class PickScreenViewModel(
     private val saveSelection: SaveSelectionUseCase,
     private val loadCities: LoadCitiesUseCase
 ) : ViewModel(), ContainerHost<PickState, Nothing> {
+
+    init {
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "PickScreen")
+        }
+    }
 
     override val container = container<PickState, Nothing>(PickState.Loading)
 

@@ -10,6 +10,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.semestrwork.navigation.navGraph
 import com.example.semestrwork.ui.theme.semestrWorkTheme
+import com.google.firebase.crashlytics.setCustomKeys
+import android.provider.Settings
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -23,5 +27,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        Firebase.crashlytics.setCustomKeys {
+            key(DEVICE_ID, Settings.Secure.ANDROID_ID)
+        }
+
+        //throw RuntimeException("Test Crash")
+    }
+
+    companion object{
+        const val DEVICE_ID = "device_id"
     }
 }

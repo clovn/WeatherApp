@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import com.example.api.AuthResult
 import com.example.impl.domain.IsAuthUseCase
 import com.example.impl.domain.LoginUseCase
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
@@ -16,6 +20,9 @@ class LoginViewModel (
     init {
         intent {
             if (isAuth.invoke()) reduce { LoginState.Success }
+        }
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "LoginScreen")
         }
     }
     fun onEvent(event: LoginEvent) {
