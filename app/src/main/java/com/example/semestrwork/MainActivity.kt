@@ -8,8 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.example.semestrwork.navigation.NavGraph
-import com.example.semestrwork.ui.theme.SemestrWorkTheme
+import com.example.semestrwork.navigation.navGraph
+import com.example.semestrwork.ui.theme.semestrWorkTheme
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -17,9 +17,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SemestrWorkTheme {
+            semestrWorkTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) {
-                    NavGraph()
+                    navGraph()
                 }
             }
         }
