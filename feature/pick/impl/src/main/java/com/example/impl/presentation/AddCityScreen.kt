@@ -28,7 +28,6 @@ fun AddCityScreen(
     viewModel: AddCityViewModel = koinInject(),
     navigateToPick: () -> Unit
 ) {
-    var cityName by remember { mutableStateOf(TextFieldValue("")) }
 
     val state by viewModel.collectAsState()
 
@@ -48,8 +47,8 @@ fun AddCityScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 TextField(
-                    value = cityName,
-                    onValueChange = { cityName = it },
+                    value = (state as AddCityState.Idle).cityName,
+                    onValueChange = { viewModel.onEvent(AddCityEvent.ChangeCity(it)) },
                     label = { Text("Введите название города") },
                     placeholder = { Text("Например, Москва") },
                     singleLine = true,
@@ -60,10 +59,7 @@ fun AddCityScreen(
 
                 Button(
                     onClick = {
-                        if (cityName.text.isNotBlank()) {
-                            viewModel.addCity(cityName.text)
-                            cityName = TextFieldValue("")
-                        }
+                            viewModel.onEvent(AddCityEvent.AddCity((state as AddCityState.Idle).cityName))
                     },
                     modifier = Modifier
                         .fillMaxWidth()

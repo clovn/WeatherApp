@@ -14,8 +14,8 @@ import org.orbitmvi.orbit.viewmodel.container
 class LoginViewModel (
     private val login: LoginUseCase,
     private val isAuth: IsAuthUseCase
-): ViewModel(), ContainerHost<LoginState, Nothing> {
-    override val container = container<LoginState, Nothing>(LoginState.Idle)
+): ViewModel(), ContainerHost<LoginState, LoginSideEffect> {
+    override val container = container<LoginState, LoginSideEffect>(LoginState.Idle())
 
     init {
         intent {
@@ -28,14 +28,28 @@ class LoginViewModel (
     fun onEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.Login -> login(event.email, event.password)
+            is LoginEvent.ChangeEmail -> onChangeEmail(event.email)
+            is LoginEvent.ChangePassword -> onChangePassword(event.password)
         }
     }
 
+    private fun onChangeEmail(email: String) = intent {
+        if (state is LoginState.Idle) {
+            reduce { (state as  LoginState.Idle).copy(email = email) }
+        }
+    }
+
+    private fun onChangePassword(password: String) = intent {
+        if (state is LoginState.Idle) {
+            reduce { (state as  LoginState.Idle).copy(password = password) }
+        }
+    }
     private fun login(email: String, password: String) = intent {
         reduce { LoginState.Loading }
         when(val result = login.invoke(email, password)){
             is AuthResult.Error -> {
-                reduce { LoginState.Error(message = result.message) }
+                postSideEffect(LoginSideEffect.Error(message = result.message))
+                reduce { LoginState.Idle() }
             }
             is AuthResult.Success -> {
                 reduce { LoginState.Success }
@@ -45,12 +59,17 @@ class LoginViewModel (
 }
 
 sealed class LoginState{
-    object Idle : LoginState()
+    data class Idle(val email: String = "", val password: String = "") : LoginState()
     object Loading : LoginState()
     object Success : LoginState()
-    data class Error(val message: String) : LoginState()
 }
 
 sealed class LoginEvent {
     data class Login(val email: String, val password: String) : LoginEvent()
+    data class ChangeEmail(val email: String): LoginEvent()
+    data class ChangePassword(val password: String): LoginEvent()
+}
+
+sealed class LoginSideEffect{
+    data class Error(val message: String): LoginSideEffect()
 }
