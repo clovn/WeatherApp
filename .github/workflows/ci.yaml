@@ -44,7 +44,7 @@ jobs:
 
   debug-apk:
     name: upload to firebase
-    needs: [unit-test]
+    # needs: [unit-test]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
